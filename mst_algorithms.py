@@ -5,6 +5,10 @@ from outputtypes import OutputType
 import heapq
 from mst_collector import MSTCollector
 
+from outputtypes import MSTWeight, MSTEdges, MSTWeightAndEdges, MSTPrettyPrintStruct, MSTWeightsList
+from inputs import AdjacencyListInput, WeightMatrixInput
+
+
 
 class MSTAlgorithm(ABC):
     @classmethod
@@ -81,6 +85,61 @@ def compute_mst(
     graph_input: 'GraphInput',
     output_type: Type['OutputType']
 ):
+    """
+    Computes the Minimum Spanning Tree (MST) using the specified algorithm, input data, and output type.
+
+    Parameters:
+    - algorithm: The MST algorithm to use (KruskalMST, PrimMST)
+    - graph_input: The input graph in one of the supported formats (AdjacencyListInput, WeightMatrixInput)
+    - output_type: The type of the desired output (MSTWeight, MSTEdges, MSTWeightAndEdges, MSTPrettyPrintStruct, MSTWeightsList)
+
+    Returns:
+    - The computed MST in the specified output type.
+
+    Example 1: Kruskal's Algorithm on Adjacency List input, returning the MST weight
+    >>> adjacency_list_input = {
+    >>>     0: [(1, 10), (2, 6), (3, 5)],
+    >>>     1: [(0, 10), (3, 15)],
+    >>>     2: [(0, 6), (3, 4)],
+    >>>     3: [(0, 5), (1, 15), (2, 4)],
+    >>> }
+    >>> graph_input = AdjacencyListInput(adjacency_list_input)
+    >>> result = compute_mst(KruskalMST, graph_input, MSTWeight)
+    >>> print(result)  # Should output the total weight of the MST
+    Total Weight: 16
+
+    Example 2: Prim's Algorithm on Weight Matrix input, returning the MST edges
+    >>> weight_matrix_input = [
+    >>>     [0, 10, 6, 5],
+    >>>     [10, 0, 0, 15],
+    >>>     [6, 0, 0, 4],
+    >>>     [5, 15, 4, 0],
+    >>> ]
+    >>> graph_input = WeightMatrixInput(weight_matrix_input)
+    >>> result = compute_mst(PrimMST, graph_input, MSTEdges)
+    >>> print(result)  # Should output the list of MST edges
+    [(0, 3), (2, 3), (0, 1)]
+
+    Example 3: Kruskal's Algorithm on Adjacency List input, returning the MST edges and weights
+    >>> result = compute_mst(KruskalMST, graph_input, MSTWeightAndEdges)
+    >>> print(result)  # Should output the MST edges and total weight
+    ([(0, 3), (0, 2), (1, 2)], 16)
+
+    Example 4: Prim's Algorithm on Weight Matrix input, returning a pretty-printed structure
+    >>> result = compute_mst(PrimMST, graph_input, MSTPrettyPrintStruct)
+    >>> print(result)  # Should output a nicely formatted MST with edges and total weight
+    Total Weight: 16
+    Edges:
+    0 -- 3
+    2 -- 3
+    0 -- 1
+
+    Example 5: Kruskal's Algorithm on Weight Matrix input, returning a list of MST weights
+    >>> result = compute_mst(KruskalMST, graph_input, MSTWeightsList)
+    >>> print(result)  # Should output a list of MST weights
+    [16]
+
+    """
     # Step 1: Get edges from the graph input
     edges = graph_input.get_edges()
 

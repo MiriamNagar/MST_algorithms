@@ -70,7 +70,7 @@ class MSTWeightAndEdges(OutputType):
 
 # ---- Output: Pretty-printed MST structure ----
 
-class MSTStruct(OutputType):
+class MSTPrettyPrintStruct(OutputType):
     """ Output an object with fields: weight and edges, with a nice __repr__. """
 
     @classmethod
