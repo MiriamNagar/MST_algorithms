@@ -171,15 +171,30 @@ The first step is to provide a graph input to the system. There are two primary 
     Example:
 
     ```python
-    from mst_algorithm import kruskal, prim
-    ```
+    from mst_algorithm import kruskal
 
+    # Run Kruskal's algorithm on the graph
     mst_result = kruskal(graph_input)
-    # or
+
+    from mst_algorithm import prim
+
+    # Run Prim's algorithm on the graph
     mst_result = prim(graph_input)
 
+    ```
+
+
 ### 3. Choosing the Output Format
-    After computing the MST, select the output format. For example, to extract only the MST weight:
+    After the MST is computed, you can choose the output format. The system supports various formats such as:
+
+    Total MST Weight: Only the total weight of the MST.
+
+    List of MST Edges: A list of edges included in the MST.
+
+    MST Weight and Edges: A tuple of the total weight and the list of edges.
+
+    Pretty-Printed Output: A human-readable, nicely formatted string showing the weight and edges.
+
 
     ```python
     output_type = MSTWeight()
@@ -209,3 +224,121 @@ The first step is to provide a graph input to the system. There are two primary 
 
     This will print the MST in a user-friendly format with the edges and total weight.
 
+### 5. compute_mst Function Overview
+    The compute_mst function will take the graph input and algorithm type as parameters, run the MST algorithm (Kruskal's or Prim's), and return the MST result.
+
+    Here's how the compute_mst function might be structured:
+
+    ```python
+    from graph_inputs import AdjacencyListInput
+    from output_types import MSTWeight
+
+    # Step 1: Prepare graph data
+    graph_data = {
+        0: [(1, 1), (2, 4)],
+        1: [(0, 1), (2, 2)],
+        2: [(0, 4), (1, 2)]
+    }
+
+    graph_input = AdjacencyListInput(graph_data)
+
+    # Step 2: Compute MST using Kruskal's algorithm and output total weight
+    result = compute_mst(graph_input, 'kruskal', MSTWeight)
+
+    # Step 3: Print the result
+    print(f"Total MST Weight: {result}")
+
+    ```
+
+## Addition rules
+
+### 1. Adding a New MST Algorithm
+To add a new MST algorithm, you'll follow these steps:
+
+Step 1: Define the Algorithm
+In your mst_algorithm.py file, define the new algorithm function. For example, if you want to add Boruvka’s Algorithm, you could do something like this:
+
+```python
+def boruvka(graph_input: GraphInput):
+    """
+    Implements Boruvka's algorithm to find the Minimum Spanning Tree (MST).
+    Args:
+        graph_input (GraphInput): The graph data.
+
+    Returns:
+        List of edges in the MST with their weights.
+    """
+    # Algorithm implementation here
+    # For simplicity, let's assume it returns a list of edges in the MST
+    mst_edges = []
+    # Your Boruvka algorithm implementation...
+    return mst_edges
+
+```
+
+### 2. Adding a New Graph Input Type
+If you want to support a new input format (e.g., adjacency matrix, edge list), you can create a new class implementing the GraphInput abstract class.
+
+Step 1: Define the New Input Type
+Create a new class (e.g., EdgeListInput) that implements GraphInput.
+
+```python
+class EdgeListInput(GraphInput):
+    def get_edges(self) -> List[Tuple[int, int, float]]:
+        # Convert edge list to appropriate edge format
+        edges = []
+        for u, v, weight in self.data:
+            edges.append((u, v, weight))
+        return edges
+
+    def get_nodes(self) -> Set[int]:
+        # Extract unique nodes from edge list
+        nodes = set()
+        for u, v, _ in self.data:
+            nodes.add(u)
+            nodes.add(v)
+        return nodes
+
+```
+
+
+### 3. Adding a New Output Format
+You can also add new output formats for your MST results. For example, if you want to output the degree of each node in the MST, you can define a new output type.
+
+Define the New Output Format
+Create a new class that extends OutputType. For instance, you could add a format that returns the degree of each node:
+
+```python
+class MSTNodeDegrees(OutputType):
+    """ Output a dictionary mapping each node to its degree in the MST. """
+
+    @classmethod
+    def create_collector(cls) -> MSTCollector:
+        return CollectMSTEdges()  # We only need the edges for this calculation.
+
+    @classmethod
+    def extract_output_from_collector(cls, result: list[tuple[int, int]]) -> Dict[int, int]:
+        degree = {}
+        for u, v, _ in result:
+            degree[u] = degree.get(u, 0) + 1
+            degree[v] = degree.get(v, 0) + 1
+        return degree
+
+```
+
+
+### 4. Testing and Documentation
+Once you’ve added the new features, it’s important to:
+
+Test: Run unit tests or manually test the new features to ensure they work correctly.
+
+Document: Update the README or other documentation with details on how to use the new features.
+
+### 5. Considerations for Large Scale Changes
+When making large changes to the codebase, it’s important to consider:
+
+Backwards Compatibility: Ensure that your changes don't break existing functionality.
+
+Performance: If you're adding algorithms or input types that significantly impact performance, test how they scale with large datasets.
+
+Modular Design: Keep the code modular and extensible so that additional features can be added easily in the future.
