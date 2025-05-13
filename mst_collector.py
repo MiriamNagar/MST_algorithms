@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class MSTCollector(ABC):
     def __init__(self):
         self.total_weight = 0
@@ -11,6 +12,7 @@ class MSTCollector(ABC):
     @abstractmethod
     def result(self):
         pass
+
 
 class CollectMSTEdges(MSTCollector):
     def __init__(self):
@@ -37,16 +39,17 @@ class CollectMSTWeightOnly(MSTCollector):
 
 
 class CollectMSTWeightAndEdges(MSTCollector):
-        def __init__(self):
-            super().__init__()
-            self.edges = []
+    def __init__(self):
+        super().__init__()
+        self.edges = []
 
-        def add_edge(self, edge, weight):
-            self.total_weight += weight
-            self.edges.append(edge)
+    def add_edge(self, edge, weight):
+        self.total_weight += weight
+        self.edges.append(edge)
 
-        def result(self):
-            return (self.total_weight, self.edges)
+    def result(self):
+        return (self.total_weight, self.edges)
+
 
 class CollectPrettyMSTWeightAndEdges(MSTCollector):
     class Struct:
@@ -55,7 +58,9 @@ class CollectPrettyMSTWeightAndEdges(MSTCollector):
             self.edges = edges
 
         def __repr__(self):
-            edge_lines = "\n".join(f"{u} -- {v} (weight: {w})" for u, v, w in self.edges)
+            edge_lines = "\n".join(
+                f"{u} -- {v} (weight: {w})" for u, v, w in self.edges
+            )
             return f"Total Weight: {self.weight}\nEdges:\n{edge_lines}"
 
     def __init__(self):
@@ -71,10 +76,9 @@ class CollectPrettyMSTWeightAndEdges(MSTCollector):
         return self.Struct(self.total_weight, self.edges)
 
 
-
 class CollectMSTWeightsList(MSTCollector):
-    """ Collector that collects only the weights of the MST edges. """
-    
+    """Collector that collects only the weights of the MST edges."""
+
     def __init__(self):
         super().__init__()
         self.weights = []

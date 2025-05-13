@@ -5,9 +5,17 @@ For file 50-FlyWeight.
 """
 
 from abc import ABC
-from mst_collector import MSTCollector, CollectMSTEdges, CollectMSTWeightOnly, CollectMSTWeightAndEdges, CollectPrettyMSTWeightAndEdges, CollectMSTWeightsList
+from mst_collector import (
+    MSTCollector,
+    CollectMSTEdges,
+    CollectMSTWeightOnly,
+    CollectMSTWeightAndEdges,
+    CollectPrettyMSTWeightAndEdges,
+    CollectMSTWeightsList,
+)
 
 CollectorResult = any
+
 
 class OutputType(ABC):
     @classmethod
@@ -27,8 +35,9 @@ class OutputType(ABC):
 
 # ---- Output: Only total MST weight ----
 
+
 class MSTWeight(OutputType):
-    """ Output only the total weight of the MST. """
+    """Output only the total weight of the MST."""
 
     @classmethod
     def create_collector(cls) -> MSTCollector:
@@ -41,8 +50,9 @@ class MSTWeight(OutputType):
 
 # ---- Output: List of MST edges ----
 
+
 class MSTEdges(OutputType):
-    """ Output only the list of MST edges. """
+    """Output only the list of MST edges."""
 
     @classmethod
     def create_collector(cls) -> MSTCollector:
@@ -55,8 +65,9 @@ class MSTEdges(OutputType):
 
 # ---- Output: (Total weight, Edge list) ----
 
+
 class MSTWeightAndEdges(OutputType):
-    """ Output a tuple of (total_weight, list_of_edges). """
+    """Output a tuple of (total_weight, list_of_edges)."""
 
     @classmethod
     def create_collector(cls) -> MSTCollector:
@@ -64,26 +75,31 @@ class MSTWeightAndEdges(OutputType):
         return CollectMSTWeightAndEdges()
 
     @classmethod
-    def extract_output_from_collector(cls, result: tuple[float, list[tuple[int, int]]]) -> tuple:
+    def extract_output_from_collector(
+        cls, result: tuple[float, list[tuple[int, int]]]
+    ) -> tuple:
         return result
 
 
 # ---- Output: Pretty-printed MST structure ----
 
+
 class MSTPrettyPrintStruct(OutputType):
-    """ Output an object with fields: weight and edges, with a nice __repr__. """
+    """Output an object with fields: weight and edges, with a nice __repr__."""
 
     @classmethod
     def create_collector(cls) -> MSTCollector:
         return CollectPrettyMSTWeightAndEdges()
 
     @classmethod
-    def extract_output_from_collector(cls, result: 'CollectPrettyMSTWeightAndEdges.Struct') -> 'CollectPrettyMSTWeightAndEdges.Struct':
+    def extract_output_from_collector(
+        cls, result: "CollectPrettyMSTWeightAndEdges.Struct"
+    ) -> "CollectPrettyMSTWeightAndEdges.Struct":
         return result
-    
+
 
 class MSTWeightsList(OutputType):
-    """ Output a list of weights from the MST edges. """
+    """Output a list of weights from the MST edges."""
 
     @classmethod
     def create_collector(cls) -> MSTCollector:

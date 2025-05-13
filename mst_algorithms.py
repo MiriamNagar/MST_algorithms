@@ -1,13 +1,18 @@
 from abc import ABC, abstractmethod
 from typing import List, Set, Dict, Any, Tuple, Type
-from inputs  import GraphInput
+from inputs import GraphInput
 from outputtypes import OutputType
 import heapq
 from mst_collector import MSTCollector
 
-from outputtypes import MSTWeight, MSTEdges, MSTWeightAndEdges, MSTPrettyPrintStruct, MSTWeightsList
+from outputtypes import (
+    MSTWeight,
+    MSTEdges,
+    MSTWeightAndEdges,
+    MSTPrettyPrintStruct,
+    MSTWeightsList,
+)
 from inputs import AdjacencyListInput, WeightMatrixInput
-
 
 
 class MSTAlgorithm(ABC):
@@ -16,18 +21,19 @@ class MSTAlgorithm(ABC):
     def compute(cls, graph_input: GraphInput, input_data: Any, collector: MSTCollector):
         pass
 
+
 class MSTAlgorithm(ABC):
     @staticmethod
     @abstractmethod
-    def compute(cls, edges: list[tuple[int, int, float]], collector: 'MSTCollector'):
+    def compute(cls, edges: list[tuple[int, int, float]], collector: "MSTCollector"):
         pass
-    
+
 
 class KruskalMST(MSTAlgorithm):
     @staticmethod
     def compute(edges, collector):
         parent = {}
-        
+
         def find(u):
             while parent[u] != u:
                 parent[u] = parent[parent[u]]
@@ -50,7 +56,7 @@ class KruskalMST(MSTAlgorithm):
 
 class PrimMST(MSTAlgorithm):
     @staticmethod
-    def compute(edges: List[Tuple[int, int, float]], collector: 'MSTCollector'):
+    def compute(edges: List[Tuple[int, int, float]], collector: "MSTCollector"):
         from collections import defaultdict
 
         # Step 1: Build adjacency list
@@ -81,9 +87,9 @@ class PrimMST(MSTAlgorithm):
 
 
 def compute_mst(
-    algorithm: Type['MSTAlgorithm'],
-    graph_input: 'GraphInput',
-    output_type: Type['OutputType']
+    algorithm: Type["MSTAlgorithm"],
+    graph_input: "GraphInput",
+    output_type: Type["OutputType"],
 ):
     """
     Computes the Minimum Spanning Tree (MST) using the specified algorithm, input data, and output type.

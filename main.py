@@ -1,5 +1,11 @@
 from mst_algorithms import compute_mst, KruskalMST, PrimMST
-from outputtypes import MSTEdges, MSTWeight, MSTWeightAndEdges, MSTPrettyPrintStruct, MSTWeightsList
+from outputtypes import (
+    MSTEdges,
+    MSTWeight,
+    MSTWeightAndEdges,
+    MSTPrettyPrintStruct,
+    MSTWeightsList,
+)
 from inputs import AdjacencyListInput, WeightMatrixInput
 
 # Sample data
@@ -28,15 +34,29 @@ inputs = [
 algorithms = [KruskalMST, PrimMST]
 
 # Output types
-output_types = [MSTWeight, MSTEdges, MSTWeightAndEdges, MSTPrettyPrintStruct, MSTWeightsList]
+output_types = [
+    MSTWeight,
+    MSTEdges,
+    MSTWeightAndEdges,
+    MSTPrettyPrintStruct,
+    MSTWeightsList,
+]
 
 # Run all combinations: 2 inputs × 2 algorithms × 5 output types = 20 total
 for graph_input in inputs:
     for algorithm in algorithms:
         for output_type in output_types:
-            print(f"--- {type(graph_input).__name__} | {algorithm.__name__} | {output_type.__name__} ---")
+            print(
+                f"--- {type(graph_input).__name__} | {algorithm.__name__} | {output_type.__name__} ---"
+            )
             try:
                 result = compute_mst(algorithm, graph_input, output_type)
                 print(result, end="\n\n")
             except Exception as e:
                 print(f"Error: {e}", end="\n\n")
+
+
+if __name__ == "__main__":
+    import doctest
+
+    print(doctest.testmod())
