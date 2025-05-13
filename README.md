@@ -25,33 +25,33 @@ The architecture of the system is divided into three primary components:
 
 1. Separation of Concerns:
 
-The system has been designed to separate concerns between input handling, MST computation, and output formatting. This modular approach makes the system flexible, as each component can evolve independently of the others.
+    The system has been designed to separate concerns between input handling, MST computation, and output formatting. This modular approach makes the system flexible, as each component can evolve independently of the others.
 
-Example: The GraphInput classes (AdjacencyListInput, WeightMatrixInput) are separate from the MST computation logic, ensuring that any changes to the graph representation do not affect the MST algorithms.
+    Example: The GraphInput classes (AdjacencyListInput, WeightMatrixInput) are separate from the MST computation logic, ensuring that any changes to the graph representation do not affect the MST algorithms.
 
 2. Modular Output Formats:
 
-Each output format is handled by a dedicated class that adheres to the OutputType interface. This modularity allows for the easy addition of new output formats without affecting the existing system.
+    Each output format is handled by a dedicated class that adheres to the OutputType interface. This modularity allows for the easy addition of new output formats without affecting the existing system.
 
-Why Important: The need for various output formats (weight only, edges only, pretty print, etc.) is a key requirement, and this approach allows for simple extension of the system when additional formats are needed.
+    Why Important: The need for various output formats (weight only, edges only, pretty print, etc.) is a key requirement, and this approach allows for simple extension of the system when additional formats are needed.
 
 3. Flexibility in Input Handling:
 
-The system supports multiple graph input formats (Adjacency List and Weight Matrix) to accommodate different types of graph representations that might be encountered in various use cases.
+    The system supports multiple graph input formats (Adjacency List and Weight Matrix) to accommodate different types of graph representations that might be encountered in various use cases.
 
-Why Important: Different use cases and graph data sources may represent graphs in distinct ways, and the ability to handle multiple input formats makes the system more flexible and adaptable.
+    Why Important: Different use cases and graph data sources may represent graphs in distinct ways, and the ability to handle multiple input formats makes the system more flexible and adaptable.
 
 4. Collector Pattern for Results:
 
-The MSTCollector classes encapsulate how results are gathered and returned. Each collector is responsible for collecting the relevant data (edges, weight, or both) and returning it in the desired format.
+    The MSTCollector classes encapsulate how results are gathered and returned. Each collector is responsible for collecting the relevant data (edges, weight, or both) and returning it in the desired format.
 
-Why Important: This design ensures that the process of collecting results is consistent and decoupled from the MST algorithm itself, making it easier to implement new result formats without modifying the core MST logic.
+    Why Important: This design ensures that the process of collecting results is consistent and decoupled from the MST algorithm itself, making it easier to implement new result formats without modifying the core MST logic.
 
 5. Abstract Factory for Output Generation:
 
-The OutputType class is responsible for creating the appropriate collector instance. This abstraction allows the client to choose the output format without having to deal with the implementation details of the collector classes.
+    The OutputType class is responsible for creating the appropriate collector instance. This abstraction allows the client to choose the output format without having to deal with the implementation details of the collector classes.
 
-Why Important: This design improves maintainability by hiding the complexity of output formatting behind a simple interface, which allows the system to scale with minimal changes to the core logic.
+    Why Important: This design improves maintainability by hiding the complexity of output formatting behind a simple interface, which allows the system to scale with minimal changes to the core logic.
 
 
 ## Design Patterns Used
