@@ -1,7 +1,5 @@
 """
 Define the various available output formats for MST algorithms.
-
-For file 50-FlyWeight.
 """
 
 from abc import ABC
@@ -18,26 +16,31 @@ CollectorResult = any
 
 
 class OutputType(ABC):
+    """
+    Abstract base class for defining different output formats from the MST computation.
+    Each subclass defines how to collect the data and extract the final result.
+    """
+
     @classmethod
     def create_collector(cls) -> MSTCollector:
         """
-        Create and return an MSTCollector instance.
+        Creates and returns an MSTCollector instance for the specific output format.
         """
         raise NotImplementedError("Choose a specific output type.")
 
     @classmethod
     def extract_output_from_collector(cls, result: CollectorResult) -> any:
         """
-        Extract the desired output format from the collector's result.
+        Extracts the desired output format from the collector's result.
         """
         raise NotImplementedError("Choose a specific output type.")
 
 
 # ---- Output: Only total MST weight ----
-
-
 class MSTWeight(OutputType):
-    """Output only the total weight of the MST."""
+    """
+    Output only the total weight of the MST.
+    """
 
     @classmethod
     def create_collector(cls) -> MSTCollector:
@@ -49,10 +52,10 @@ class MSTWeight(OutputType):
 
 
 # ---- Output: List of MST edges ----
-
-
 class MSTEdges(OutputType):
-    """Output only the list of MST edges."""
+    """
+    Output only the list of MST edges.
+    """
 
     @classmethod
     def create_collector(cls) -> MSTCollector:
@@ -64,14 +67,13 @@ class MSTEdges(OutputType):
 
 
 # ---- Output: (Total weight, Edge list) ----
-
-
 class MSTWeightAndEdges(OutputType):
-    """Output a tuple of (total_weight, list_of_edges)."""
+    """
+    Output a tuple of (total_weight, list_of_edges).
+    """
 
     @classmethod
     def create_collector(cls) -> MSTCollector:
-        # return cls.Collector()
         return CollectMSTWeightAndEdges()
 
     @classmethod
@@ -82,10 +84,10 @@ class MSTWeightAndEdges(OutputType):
 
 
 # ---- Output: Pretty-printed MST structure ----
-
-
 class MSTPrettyPrintStruct(OutputType):
-    """Output an object with fields: weight and edges, with a nice __repr__."""
+    """
+    Output a structured representation of the MST, with a nice human-readable format.
+    """
 
     @classmethod
     def create_collector(cls) -> MSTCollector:
@@ -98,8 +100,11 @@ class MSTPrettyPrintStruct(OutputType):
         return result
 
 
+# ---- Output: List of MST edge weights ----
 class MSTWeightsList(OutputType):
-    """Output a list of weights from the MST edges."""
+    """
+    Output a list of weights from the MST edges.
+    """
 
     @classmethod
     def create_collector(cls) -> MSTCollector:
