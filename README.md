@@ -135,120 +135,120 @@ To get started with the project, follow these steps:
 The first step is to provide a graph input to the system. There are two primary ways to input a graph:
 
 #### a. Adjacency List
-    An adjacency list represents a graph using a dictionary where each key is a node, and the associated value is a list of tuples representing the neighboring nodes and the edge weights.
+An adjacency list represents a graph using a dictionary where each key is a node, and the associated value is a list of tuples representing the neighboring nodes and the edge weights.
 
-    Example:
+Example:
 
-    ```python
-    graph_data = {
-        0: [(1, 1), (2, 4)],
-        1: [(0, 1), (2, 2)],
-        2: [(0, 4), (1, 2)]
-    }
-    ```
+```python
+graph_data = {
+    0: [(1, 1), (2, 4)],
+    1: [(0, 1), (2, 2)],
+    2: [(0, 4), (1, 2)]
+}
+```
 
-    graph_input = AdjacencyListInput(graph_data)
+graph_input = AdjacencyListInput(graph_data)
 
 #### b. Weight Matrix
 
-    A weight matrix represents a graph using a 2D matrix where each element (i, j) represents the weight of the edge between nodes i and j.
+A weight matrix represents a graph using a 2D matrix where each element (i, j) represents the weight of the edge between nodes i and j.
 
-    Example:
+Example:
 
-    ```python
-    graph_data = [
-        [0, 1, 4],
-        [1, 0, 2],
-        [4, 2, 0]
-    ]
-    ```
+```python
+graph_data = [
+    [0, 1, 4],
+    [1, 0, 2],
+    [4, 2, 0]
+]
+```
 
-    graph_input = WeightMatrixInput(graph_data)
+graph_input = WeightMatrixInput(graph_data)
 
 ### 2. Selecting the MST Algorithm
-    You can use either Kruskal's or Prim's algorithm to compute the MST. The output format can be customized to your needs, and you can select from various formats such as the total MST weight, list of edges, or formatted output.
+You can use either Kruskal's or Prim's algorithm to compute the MST. The output format can be customized to your needs, and you can select from various formats such as the total MST weight, list of edges, or formatted output.
 
-    Example:
+Example:
 
-    ```python
-    from mst_algorithm import kruskal
+```python
+from mst_algorithm import kruskal
 
-    # Run Kruskal's algorithm on the graph
-    mst_result = kruskal(graph_input)
+# Run Kruskal's algorithm on the graph
+mst_result = kruskal(graph_input)
 
-    from mst_algorithm import prim
+from mst_algorithm import prim
 
-    # Run Prim's algorithm on the graph
-    mst_result = prim(graph_input)
+# Run Prim's algorithm on the graph
+mst_result = prim(graph_input)
 
-    ```
+```
 
 
 ### 3. Choosing the Output Format
-    After the MST is computed, you can choose the output format. The system supports various formats such as:
+After the MST is computed, you can choose the output format. The system supports various formats such as:
 
-    Total MST Weight: Only the total weight of the MST.
+Total MST Weight: Only the total weight of the MST.
 
-    List of MST Edges: A list of edges included in the MST.
+List of MST Edges: A list of edges included in the MST.
 
-    MST Weight and Edges: A tuple of the total weight and the list of edges.
+MST Weight and Edges: A tuple of the total weight and the list of edges.
 
-    Pretty-Printed Output: A human-readable, nicely formatted string showing the weight and edges.
+Pretty-Printed Output: A human-readable, nicely formatted string showing the weight and edges.
 
 
-    ```python
-    output_type = MSTWeight()
-    collector = output_type.create_collector()
-    # Assuming 'mst_result' is the result from Kruskal or Prim
-    for edge, weight in mst_result:
-        collector.add_edge(edge, weight)
+```python
+output_type = MSTWeight()
+collector = output_type.create_collector()
+# Assuming 'mst_result' is the result from Kruskal or Prim
+for edge, weight in mst_result:
+    collector.add_edge(edge, weight)
 
-    result = output_type.extract_output_from_collector(collector.result())
-    print(result)
-    ```
+result = output_type.extract_output_from_collector(collector.result())
+print(result)
+```
 
-    This will print the total MST weight.
+This will print the total MST weight.
 
 ### 4. Other Output Formats
-    You can also choose other formats like the MST edges, or a pretty-printed structure:
+You can also choose other formats like the MST edges, or a pretty-printed structure:
 
-    ```python
-    output_type = MSTPrettyPrintStruct()
-    collector = output_type.create_collector()
-    for edge, weight in mst_result:
-        collector.add_edge(edge, weight)
+```python
+output_type = MSTPrettyPrintStruct()
+collector = output_type.create_collector()
+for edge, weight in mst_result:
+    collector.add_edge(edge, weight)
 
-    result = output_type.extract_output_from_collector(collector.result())
-    print(result)
-    ```
+result = output_type.extract_output_from_collector(collector.result())
+print(result)
+```
 
-    This will print the MST in a user-friendly format with the edges and total weight.
+This will print the MST in a user-friendly format with the edges and total weight.
 
 ### 5. compute_mst Function Overview
-    The compute_mst function will take the graph input and algorithm type as parameters, run the MST algorithm (Kruskal's or Prim's), and return the MST result.
+The compute_mst function will take the graph input and algorithm type as parameters, run the MST algorithm (Kruskal's or Prim's), and return the MST result.
 
-    Here's how the compute_mst function might be structured:
+Here's how the compute_mst function might be structured:
 
-    ```python
-    from graph_inputs import AdjacencyListInput
-    from output_types import MSTWeight
+```python
+from graph_inputs import AdjacencyListInput
+from output_types import MSTWeight
 
-    # Step 1: Prepare graph data
-    graph_data = {
-        0: [(1, 1), (2, 4)],
-        1: [(0, 1), (2, 2)],
-        2: [(0, 4), (1, 2)]
-    }
+# Step 1: Prepare graph data
+graph_data = {
+    0: [(1, 1), (2, 4)],
+    1: [(0, 1), (2, 2)],
+    2: [(0, 4), (1, 2)]
+}
 
-    graph_input = AdjacencyListInput(graph_data)
+graph_input = AdjacencyListInput(graph_data)
 
-    # Step 2: Compute MST using Kruskal's algorithm and output total weight
-    result = compute_mst(graph_input, 'kruskal', MSTWeight)
+# Step 2: Compute MST using Kruskal's algorithm and output total weight
+result = compute_mst(graph_input, 'kruskal', MSTWeight)
 
-    # Step 3: Print the result
-    print(f"Total MST Weight: {result}")
+# Step 3: Print the result
+print(f"Total MST Weight: {result}")
 
-    ```
+```
 
 ## Addition rules
 
