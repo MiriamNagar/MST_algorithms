@@ -168,63 +168,24 @@ graph_input = WeightMatrixInput(graph_data)
 ### 2. Selecting the MST Algorithm
 You can use either Kruskal's or Prim's algorithm to compute the MST. The output format can be customized to your needs, and you can select from various formats such as the total MST weight, list of edges, or formatted output.
 
-Example:
-
-```python
-from mst_algorithm import kruskal
-
-# Run Kruskal's algorithm on the graph
-mst_result = kruskal(graph_input)
-
-from mst_algorithm import prim
-
-# Run Prim's algorithm on the graph
-mst_result = prim(graph_input)
-
-```
-
+current list of algorithms: 
+- Kruskal
+- Prim
 
 ### 3. Choosing the Output Format
 After the MST is computed, you can choose the output format. The system supports various formats such as:
 
-Total MST Weight: Only the total weight of the MST.
+MSTWeight: Only the total weight of the MST.
 
-List of MST Edges: A list of edges included in the MST.
+MSTEdges: A list of edges included in the MST.
 
-MST Weight and Edges: A tuple of the total weight and the list of edges.
+MSTWeightAndEdges: A tuple of the total weight and the list of edges.
 
-Pretty-Printed Output: A human-readable, nicely formatted string showing the weight and edges.
+MSTPrettyPrintStruct: A human-readable, nicely formatted string showing the weight and edges.
 
+MSTWeightsList: A list of weights included in the MST.
 
-```python
-output_type = MSTWeight()
-collector = output_type.create_collector()
-# Assuming 'mst_result' is the result from Kruskal or Prim
-for edge, weight in mst_result:
-    collector.add_edge(edge, weight)
-
-result = output_type.extract_output_from_collector(collector.result())
-print(result)
-```
-
-This will print the total MST weight.
-
-### 4. Other Output Formats
-You can also choose other formats like the MST edges, or a pretty-printed structure:
-
-```python
-output_type = MSTPrettyPrintStruct()
-collector = output_type.create_collector()
-for edge, weight in mst_result:
-    collector.add_edge(edge, weight)
-
-result = output_type.extract_output_from_collector(collector.result())
-print(result)
-```
-
-This will print the MST in a user-friendly format with the edges and total weight.
-
-### 5. compute_mst Function Overview
+### 4. compute_mst Function Overview
 The compute_mst function will take the graph input and algorithm type as parameters, run the MST algorithm (Kruskal's or Prim's), and return the MST result.
 
 Here's how the compute_mst function might be structured:
@@ -232,6 +193,7 @@ Here's how the compute_mst function might be structured:
 ```python
 from graph_inputs import AdjacencyListInput
 from output_types import MSTWeight
+from mst_algorithms import compute_mst, KruskalMST, PrimMST
 
 # Step 1: Prepare graph data
 graph_data = {
@@ -243,7 +205,7 @@ graph_data = {
 graph_input = AdjacencyListInput(graph_data)
 
 # Step 2: Compute MST using Kruskal's algorithm and output total weight
-result = compute_mst(graph_input, 'kruskal', MSTWeight)
+result = compute_mst(graph_input, KruskalMST, MSTWeight)
 
 # Step 3: Print the result
 print(f"Total MST Weight: {result}")
@@ -305,27 +267,41 @@ class EdgeListInput(GraphInput):
 ### 3. Adding a New Output Format
 You can also add new output formats for your MST results. For example, if you want to output the degree of each node in the MST, you can define a new output type.
 
+Define a New MSTCollector - 
+Create a new collector class inside mst_collector.py:
+
+```python
+class CollectMSTNodeDegrees(MSTCollector):
+    def init(self):
+    self.degrees = {}
+
+    def add_edge(self, edge: tuple[int, int], weight: float):
+        u, v = edge
+        self.degrees[u] = self.degrees.get(u, 0) + 1
+        self.degrees[v] = self.degrees.get(v, 0) + 1
+
+    def result(self):
+        return self.degrees
+```
+
 Define the New Output Format
-Create a new class that extends OutputType. For instance, you could add a format that returns the degree of each node:
+Create a new class that extends OutputType.
 
 ```python
 class MSTNodeDegrees(OutputType):
-    """ Output a dictionary mapping each node to its degree in the MST. """
-
+""" Output a dictionary of node degrees in the MST. """
     @classmethod
     def create_collector(cls) -> MSTCollector:
-        return CollectMSTEdges()  # We only need the edges for this calculation.
+        return CollectMSTNodeDegrees()
 
     @classmethod
-    def extract_output_from_collector(cls, result: list[tuple[int, int]]) -> Dict[int, int]:
-        degree = {}
-        for u, v, _ in result:
-            degree[u] = degree.get(u, 0) + 1
-            degree[v] = degree.get(v, 0) + 1
-        return degree
+    def extract_output_from_collector(cls, result: dict[int, int]) -> dict[int, int]:
+        return result
+
 
 ```
 
+Now, this new output type can be used in your main pipeline just like the others
 
 ### 4. Testing and Documentation
 Once you’ve added the new features, it’s important to:
